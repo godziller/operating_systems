@@ -20,6 +20,7 @@ main:				# main, a bit like init/boot loader
 	li $v0, 10		# system exit, we should never reach here
 	syscall
 
+# This block defines the first process, which continuously prints its process ID and a counter value.
 p1:	
 	li $v0, 102		# get process id and store in $t1
 	syscall
@@ -44,6 +45,8 @@ p1_loop:
 	addi $t0, $t0, 1	# increment counter 
 	b p1_loop		# run again
 
+# This block defines the second process, which behaves similarly to p1 
+# BUT starts its counter at 1000 and increments by 5.
 p2:	
 	li $v0, 102		# get process id and store in $t1
 	syscall
@@ -91,7 +94,9 @@ sys_hdlr:
 	beq $v0, 102, sys_102	# syscall 102 (return process id)
 	li $v0, 10		# if it is another syscall we terminate (should not happen)
 	syscall
-	
+
+# This system call registers a new process by searching for an available PCB slot and storing the process start address.
+
 sys_100: #register a new process with the OS
 	li    $k0, 0	  	# loop counter for pcb
 s100_next:	
