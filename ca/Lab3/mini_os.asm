@@ -4,6 +4,9 @@ post_txt:	.asciiz "): "
 newline: 	.asciiz "\n"
 
 .text
+# This is the entry point of the program, 
+# responsible for registering processes and starting the scheduler.
+
 main:				# main, a bit like init/boot loader
 	li $v0, 100		# syscall 100 to register a new process with the scheduler
 	la $a0, p1		# $a0 contains the process start address		
