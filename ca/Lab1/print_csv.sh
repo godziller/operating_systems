@@ -1,45 +1,17 @@
 #!/usr/bin/bash
 
-input_file="./sensor_data.csv"
-output_file="./filtered_sensor_data.csv"
+# Take the filename from command-line argument
+input_file="$1"
 
-
-if [ -e "$input_file" ]; then
-	echo "File exists: $input_file"
-else
-	echo "File not found: $input_file"
-fi 
-
-#checking output files existence
-
-if [ -e "$output_file" ]; then
-	echo "File exists: $output_file"
-else
-	echo "File not found: $output_file"
+# Check if the file exists
+# This is part 2 of the assignment.
+if [ ! -e "$input_file" ]; then
+    echo "File not found: $input_file"
+    exit 1
 fi
 
-#testing if output file exists as a regular file:
-
-if [ -f "$output_file[@]" ]; then
-	echo "File ($output_file) is a regular file"
-else
-	echo "it is NOT REGULAR!!"
-fi
-
-# Question 1 method
-while IFS=' ,:' read -r id timestamp temp pressure; do
-    # Debugging: Print out the raw line and timestamp
-    echo "Processing line: ID=$id, Timestamp=$timestamp, Temp=$temp, Pressure=$pressure"
-
-    # Check if timestamp is empty or invalid
-    if [ -z "$timestamp" ] || [ ! "$timestamp" =~ ^[0-9]+$ ]; then
-        echo "Invalid timestamp: $timestamp for ID: $id"
-        continue
-    fi
-
-    # Convert the Unix timestamp to the desired format with spaces
-    time=$(date -d @$timestamp +"%Y -%m -%d %H:%M:%S")
-
-    # Output the formatted result
-    echo -e "ID : $id , Time : $time , Temp : $temp , Pressure :\n$pressure"
+# Read the file line by line and output in the desired format
+# Part 3 of the assignment - simple loop, dumping out the data.
+while IFS=',' read -r id timestamp temp pressure; do
+    echo "ID : $id , Time : $timestamp , Temp : $temp , Pressure : $pressure"
 done < "$input_file"

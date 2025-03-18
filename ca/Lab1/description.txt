@@ -1,0 +1,39 @@
+# Task 1
+
+#!/usr/bin/bash - this tells the system that this is a shell script.
+input_file="$1" - this creates a variable - input_file and set it to the argument passed to the script.
+[ ! -e "$input_file" ] - returns true/false if the file set as input_file exists or not.
+if [ ! -e "$input_file" ]; then
+    echo "File not found: $input_file"
+    exit 1
+fi - this is an if then else, exiting if the file does not exist, continuing if it does.
+
+while IFS=',' - is Internal Field Seperator - basically here telling the script to use ',' to separate columns in line.
+read -r id timestamp temp pressure; uses IFS seperator to read a line and split it into these arguments.
+echo - dumps out the string inside "", and uses the argument values "@argument" in each print.
+
+the file we caught earlier, done < "$input_file" injects it into the while loop so the read can execute on it.
+
+# Task 2
+
+Very similar to Task 1, but the difference here is this:
+tail -n +2 "$input_file" | - does 2 things, tail takes off the header line of the file and starts the processing at the second line.
+then the "|" feeds this 'new' file to the while loop - so different from the done < earlier.
+in our loop this time, we intercept @timestamp before printing, and reformat it, creating a new variable - formatted_time - and setting it to the output of the date command - which makes the unix time more ledgible.
+
+# Task 3
+
+Builds on Task 1 & 2 - but this time we have a second file - the output file we want to store the results of this script.
+-z checks if the user correctly specifies an output file, and -e then checks it doesn't exist - no overwriting.
+this while loop is similar in pattern, but this time we do some checking on the temp column.
+
+We have a double pipe here, the tail from task 1 strips the header and passes the file without header to the awk.
+the awk processes this new data, and inspects col 3 - $3 and filters out if the value is greater than 50
+then we enter the while loop again as described earlier.
+
+# Task 4
+this builds on task 3. but this time I inject the sort function, so the tail does as before - strips header.
+Then however the sort kicks into action. It needs a delimiter to identify columnn done via -t ','
+Once it knows how to identify columns we need to tell it what column to sort on - this is where -k2,2n comes in
+it says col (-k2) but only col 2 (2n)
+then once sorted it pipes it onto the awk which performs as described in task 3
