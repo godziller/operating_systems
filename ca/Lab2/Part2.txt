@@ -1,0 +1,17 @@
+Instead of writing and reading to a pipe we could write and read to a file?
+
+Yes - you could create a file, have the producer write to it and a consumer read from it.
+There would be challenges, described in answers below - but to this very specific question,  the answer is yes.
+
+What would be the difference? Why would be a pipe a better choice compared to a file?
+A pipe is better because it provides real-time IPC. Files don't.
+If you chose a file as a mechanism, you can dump data to a file, its persisted and the client can pick it up days later.
+A reboot, the data is persisted. With a pipe the data in it won't persist through a reboot.
+But if you want something more real-time a pipe is better. A client that opens is immediately informed when a producer pushes data into the pipe.
+
+A pipe is also better because as the name suggests its FIFO. A client using a file will never know when data is pushed into the file.
+Nor will it know if a producer modifies by appending (FIFO-like) to a file or modifies adhoc(randomly across the file locations).
+Basically - order is not guaranteed.
+
+Even if one agreed to some FIFO behaviour using a file as a pseudo-IPC, the performance will be far slower. Files have to be written to disk. pipes are in-memory.
+
