@@ -113,11 +113,11 @@ sys_hdlr:
 
 # This system call registers a new process by searching for an available PCB slot and storing the process start address.
 
-sys_100: #register a new process with the OS
+sys_100: #register a new process with the OS (This needs to be updated somewhere for priority)
 	li    $k0, 0	  	# loop counter for pcb
 s100_next:	
 	lw    $k1, pcb + 0($k0) # get PC stored in pcb
-	beqz  $k1, s100_alloc   # if pcb entry free, use it
+	beqz  $k1, s100_alloc   # if pcb entry free, use it (Note, follow this in to pick up new priority
 	addiu $k0,$k0,20        # if not free, try next pcb
 	bne   $k0,100, s100_next# we can have up to 5 pcb (5 times 20byte)
 	li    $v0, 10		# if it is no free pcb we terminate
@@ -150,6 +150,9 @@ sys_102: #return process id
 	addiu $k0, $k0, 4 	# skip one instruction, avoid same syscall again
 	mtc0  $k0, $14    	# write it back to EPC
 	eret			# return to process registering this new process
+
+
+# Inside in this interput handler I neet to figure out how to handle quanta.....
 
 int_hdlr: #clock used to switch to next process (we do not check exact interrupt)
         #save the current process state in pcb
