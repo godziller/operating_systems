@@ -70,6 +70,20 @@ So, any process with a priority of x will get a quanta of x+1. Quanta is the wor
 And while the integer used to describe process' priorities - 1,2,3.... might imply higher to lower, if you look at the quanta allocation x+1, it is the opposite - higher priority numbers implies higher and higher allocated quanta, ergo ability to do more work.
 For the question specifically process with priority 0 get 1 quanta and process with priority 1 get 2 quanta - circa twice the amount of budget for work - circa implying some time for the scheduler to context switch the processes.
 
+## Notes on the assembly attempt
+
+You will find compiling MIPS. However, I did not complete this assignment fully.
+This is how far I got:
+- created some variables to capture the quanta - this because I was getting a little lost in the code on my first attempts.
+- extended the PCB to catch the new priority field, and kept the original 5 process limit
+- updated the main to pass in priority in $a1 to now give each process a priority
+- the syscall gets all the way down to s100_alloc, where I pluck that priority off a registering process and jam it into the new pcp location i created for it.
+- that compiles, but further hacking around to get the scheduler working - well lest say the wheels fell of and I called it a day.
+
+To be honest, between Python, C, Bash, Java, Mongo, NeoJS, SQL languages this year, MIPs was a bridge too far for me.
+The context-switch was too much - excuse the pun!
+As I mentioned I got a good way into this, but everytime I touched the scheduler the code broke, so I cut my time losses. Mea culpa.
+
 # Part 4
 
 Why does a GPU provide a significant performance gain compared to a multi-core CPU when multiplying large matrices?
